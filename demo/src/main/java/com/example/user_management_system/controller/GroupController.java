@@ -1,5 +1,6 @@
 package com.example.user_management_system.controller;
 
+import com.example.user_management_system.dto.AddUsersToGroupDto;
 import com.example.user_management_system.dto.CommonSearchDto;
 import com.example.user_management_system.dto.GroupRequestDto;
 import com.example.user_management_system.dto.GroupResponseDto;
@@ -55,8 +56,15 @@ public class GroupController {
         return ResponseEntity.ok(groupService.removeUserFromGroup(groupId, userId));
     }
 
+    @PostMapping("/{groupId}/users")
+    public ResponseEntity<GroupResponseDto> addUsersToGroup(@PathVariable Long groupId, @Valid @RequestBody AddUsersToGroupDto dto) {
+        return ResponseEntity.ok(groupService.addUsersToGroup(groupId, dto.getUserIds()));
+    }
+
     @PostMapping("/search")
     public ResponseEntity<List<GroupResponseDto>> searchGroups(@RequestBody CommonSearchDto searchDto) {
         return ResponseEntity.ok(groupService.searchGroups(searchDto.getSearchCriteria()));
     }
+
+
 }

@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -13,6 +14,8 @@ public class GroupRequestDto {
     @NotBlank(message = "Group name is required")
     private String name;
 
-    @NotBlank(message = "Group description is required")
+
     private String description;
+    
+    private List<Long> userIds;
 }

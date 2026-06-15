@@ -13,6 +13,7 @@ public interface GroupService {
     GroupResponseDto updateGroup(Long id, GroupRequestDto dto);
     void deleteGroup(Long id);
     GroupResponseDto addUserToGroup(Long groupId, Long userId);
+    GroupResponseDto addUsersToGroup(Long groupId, List<Long> userIds);
     GroupResponseDto removeUserFromGroup(Long groupId, Long userId);
     List<GroupResponseDto> searchGroups(Map<String, String> searchCriteria);
 }

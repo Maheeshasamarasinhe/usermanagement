@@ -27,6 +27,15 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public GroupResponseDto createGroup(GroupRequestDto dto) {
         Group group = modelMapper.map(dto, Group.class);
+        
+        if (dto.getUserIds() != null && !dto.getUserIds().isEmpty()) {
+            List<User> users = userRepository.findAllById(dto.getUserIds());
+            if (users.size() != dto.getUserIds().size()) {
+                throw new RuntimeException("Some users not found");
+            }
+            group.getUsers().addAll(users);
+        }
+        
         Group savedGroup = groupRepository.save(group);
         return modelMapper.map(savedGroup, GroupResponseDto.class);
     }
@@ -70,6 +79,21 @@ public class GroupServiceImpl implements GroupService {
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
         
         group.getUsers().add(user);
+        Group updatedGroup = groupRepository.save(group);
+        return modelMapper.map(updatedGroup, GroupResponseDto.class);
+    }
+
+    @Override
+    public GroupResponseDto addUsersToGroup(Long groupId, List<Long> userIds) {
+        Group group = groupRepository.findById(groupId)
+                .orElseThrow(() -> new RuntimeException("Group not found with id: " + groupId));
+        
+        List<User> users = userRepository.findAllById(userIds);
+        if (users.size() != userIds.size()) {
+            throw new RuntimeException("Some users not found");
+        }
+        
+        group.getUsers().addAll(users);
         Group updatedGroup = groupRepository.save(group);
         return modelMapper.map(updatedGroup, GroupResponseDto.class);
     }
