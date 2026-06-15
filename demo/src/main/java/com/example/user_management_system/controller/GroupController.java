@@ -39,7 +39,7 @@ public class GroupController {
         return ResponseEntity.ok(groupService.updateGroup(id, requestDto));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<Void> deleteGroup(@PathVariable Long id) {
         groupService.deleteGroup(id);
         return ResponseEntity.noContent().build();

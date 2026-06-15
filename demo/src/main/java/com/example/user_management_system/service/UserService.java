@@ -7,6 +7,7 @@ import com.example.user_management_system.repository.UserRepository;
 import com.example.user_management_system.specification.Userspecification;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+//    @Autowired
+//    private PasswordEncoder passwordEncoder;
 
     public UserResponseDto createUser(UserRequestDto dto) {
 
@@ -74,4 +77,18 @@ public class UserService {
                 .map(user -> modelMapper.map(user, UserResponseDto.class))
                 .collect(Collectors.toList());
     }
+
+
+
+
+    public void registerUser(User user) {
+        // Hash the plain text password
+//        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        // Replace plain text with the secure hash
+//        user.setPassword(encodedPassword);
+        // Save the user with the hashed password to the DB
+        userRepository.save(user);
+    }
+
+
 }
