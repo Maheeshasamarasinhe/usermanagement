@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = modelMapper.map(dto, User.class);
-        user.setStatus(true);
+        user.setStatus(false);
         User savedUser = userRepository.save(user);
         return modelMapper.map(savedUser, UserResponseDto.class);
     }

@@ -1,11 +1,17 @@
 package com.example.user_management_system.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -18,6 +24,10 @@ public class User {
     private String password;
     private String role;
     private String telephone;
-    private boolean status = true;
+    @Column(nullable = false)
+    private boolean status;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Bank_account> bankAccounts;
 }
 

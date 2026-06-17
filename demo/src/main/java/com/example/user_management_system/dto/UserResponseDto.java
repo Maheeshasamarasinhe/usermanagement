@@ -13,7 +13,7 @@ public class UserResponseDto
     private String email;
     private String role;
     private String telephone;
-    private boolean status;
+    private boolean status=true;
 
 
 
