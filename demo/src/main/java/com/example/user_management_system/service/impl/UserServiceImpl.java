@@ -5,11 +5,11 @@ import com.example.user_management_system.dto.UserResponseDto;
 import com.example.user_management_system.entity.User;
 import com.example.user_management_system.exception.DataValidationException;
 import com.example.user_management_system.exception.NotFoundException;
+import com.example.user_management_system.mapper.UserMapper;
 import com.example.user_management_system.repository.UserRepository;
 import com.example.user_management_system.service.UserService;
 import com.example.user_management_system.specification.Userspecification;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
+    private final UserMapper userMapper;
 
     @Override
     public UserResponseDto createUser(UserRequestDto dto) {
@@ -29,16 +29,16 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundException("User with email " + dto.getEmail() + " already exists");
         }
 
-        User user = modelMapper.map(dto, User.class);
-        user.setStatus(false);
+        User user = userMapper.toEntity(dto);
+        user.setStatus(true);
         User savedUser = userRepository.save(user);
-        return modelMapper.map(savedUser, UserResponseDto.class);
+        return userMapper.toDto(savedUser);
     }
 
     @Override
     public List<UserResponseDto> getAllUsers() {
         return userRepository.findAll().stream()
-                .map(user -> modelMapper.map(user, UserResponseDto.class))
+                .map(userMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDto getUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
-        return modelMapper.map(user, UserResponseDto.class);
+        return userMapper.toDto(user);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
         existingUser.setTelephone(dto.getTelephone());
 
         User updatedUser = userRepository.save(existingUser);
-        return modelMapper.map(updatedUser, UserResponseDto.class);
+        return userMapper.toDto(updatedUser);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
     public List<UserResponseDto> searchUsers(Map<String, String> searchCriteria) {
         Userspecification specification = new Userspecification(searchCriteria);
         return userRepository.findAll(specification).stream()
-                .map(user -> modelMapper.map(user, UserResponseDto.class))
+                .map(userMapper::toDto)
                 .collect(Collectors.toList());
     }
 }

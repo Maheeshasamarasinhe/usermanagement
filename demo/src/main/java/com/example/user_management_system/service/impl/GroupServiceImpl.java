@@ -4,12 +4,12 @@ import com.example.user_management_system.dto.GroupRequestDto;
 import com.example.user_management_system.dto.GroupResponseDto;
 import com.example.user_management_system.entity.Group;
 import com.example.user_management_system.entity.User;
+import com.example.user_management_system.mapper.GroupMapper;
 import com.example.user_management_system.repository.GroupRepository;
 import com.example.user_management_system.repository.UserRepository;
 import com.example.user_management_system.service.GroupService;
 import com.example.user_management_system.specification.GroupSpecification;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,11 +22,11 @@ public class GroupServiceImpl implements GroupService {
 
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
+    private final GroupMapper groupMapper;
 
     @Override
     public GroupResponseDto createGroup(GroupRequestDto dto) {
-        Group group = modelMapper.map(dto, Group.class);
+        Group group = groupMapper.toEntity(dto);
         
         if (dto.getUserIds() != null && !dto.getUserIds().isEmpty()) {
             List<User> users = userRepository.findAllById(dto.getUserIds());
@@ -37,13 +37,13 @@ public class GroupServiceImpl implements GroupService {
         }
         
         Group savedGroup = groupRepository.save(group);
-        return modelMapper.map(savedGroup, GroupResponseDto.class);
+        return groupMapper.toDto(savedGroup);
     }
 
     @Override
     public List<GroupResponseDto> getAllGroups() {
         return groupRepository.findAll().stream()
-                .map(group -> modelMapper.map(group, GroupResponseDto.class))
+                .map(groupMapper::toDto)
                 .collect(Collectors.toList());
     }
 
@@ -51,7 +51,7 @@ public class GroupServiceImpl implements GroupService {
     public GroupResponseDto getGroupById(Long id) {
         Group group = groupRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Group not found with id: " + id));
-        return modelMapper.map(group, GroupResponseDto.class);
+        return groupMapper.toDto(group);
     }
 
     @Override
@@ -63,7 +63,7 @@ public class GroupServiceImpl implements GroupService {
         existingGroup.setDescription(dto.getDescription());
         
         Group updatedGroup = groupRepository.save(existingGroup);
-        return modelMapper.map(updatedGroup, GroupResponseDto.class);
+        return groupMapper.toDto(updatedGroup);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class GroupServiceImpl implements GroupService {
         
         group.getUsers().add(user);
         Group updatedGroup = groupRepository.save(group);
-        return modelMapper.map(updatedGroup, GroupResponseDto.class);
+        return groupMapper.toDto(updatedGroup);
     }
 
     @Override
@@ -95,7 +95,7 @@ public class GroupServiceImpl implements GroupService {
         
         group.getUsers().addAll(users);
         Group updatedGroup = groupRepository.save(group);
-        return modelMapper.map(updatedGroup, GroupResponseDto.class);
+        return groupMapper.toDto(updatedGroup);
     }
 
     @Override
@@ -107,14 +107,14 @@ public class GroupServiceImpl implements GroupService {
         
         group.getUsers().remove(user);
         Group updatedGroup = groupRepository.save(group);
-        return modelMapper.map(updatedGroup, GroupResponseDto.class);
+        return groupMapper.toDto(updatedGroup);
     }
 
     @Override
     public List<GroupResponseDto> searchGroups(Map<String, String> searchCriteria) {
         GroupSpecification specification = new GroupSpecification(searchCriteria);
         return groupRepository.findAll(specification).stream()
-                .map(group -> modelMapper.map(group, GroupResponseDto.class))
+                .map(groupMapper::toDto)
                 .collect(Collectors.toList());
     }
 }

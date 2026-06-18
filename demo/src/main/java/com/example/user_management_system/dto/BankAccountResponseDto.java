@@ -6,12 +6,12 @@ import lombok.Data;
 public class BankAccountResponseDto {
 
     private Long id;
+
     private String accountNumber;
     private String accountHolderName;
-    private String accountType;
     private String bankName;
-    private String branchName;
-    private boolean status=true;
+    private String branchCode;
+    private Double balance;
     private Long userId;
     private String username;
 }

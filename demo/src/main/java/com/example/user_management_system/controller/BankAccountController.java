@@ -14,13 +14,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/bank-accounts")
 @RequiredArgsConstructor
-public class bankAccountController {
+public class BankAccountController {
 
     private final BankAccountService bankAccountService;
 
     @PostMapping("/create")
-    public ResponseEntity<BankAccountResponseDto> createBankAccount(@Valid @RequestBody BankAccountRequestDto dto) {
-        return new ResponseEntity<>(bankAccountService.createBankAccount(dto), HttpStatus.CREATED);
+    public ResponseEntity<BankAccountResponseDto> createBankAccount(@Valid @RequestBody BankAccountRequestDto requestDto) {
+        return new ResponseEntity<>(bankAccountService.createBankAccount(requestDto), HttpStatus.CREATED);
     }
 
     @GetMapping("/getAll")
@@ -28,21 +28,19 @@ public class bankAccountController {
         return ResponseEntity.ok(bankAccountService.getAllBankAccounts());
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<BankAccountResponseDto> getBankAccountById(@PathVariable Long id) {
         return ResponseEntity.ok(bankAccountService.getBankAccountById(id));
     }
 
-    @PutMapping("/put/{id}")
-    public ResponseEntity<BankAccountResponseDto> updateBankAccount(@PathVariable Long id, @Valid @RequestBody BankAccountRequestDto dto) {
-        return ResponseEntity.ok(bankAccountService.updateBankAccount(id, dto));
+    @PutMapping("/{id}")
+    public ResponseEntity<BankAccountResponseDto> updateBankAccount(@PathVariable Long id, @Valid @RequestBody BankAccountRequestDto requestDto) {
+        return ResponseEntity.ok(bankAccountService.updateBankAccount(id, requestDto));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBankAccount(@PathVariable Long id) {
         bankAccountService.deleteBankAccount(id);
         return ResponseEntity.noContent().build();
     }
-
-
 }

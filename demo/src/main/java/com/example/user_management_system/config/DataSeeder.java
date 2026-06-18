@@ -1,6 +1,6 @@
 package com.example.user_management_system.config;
 
-import com.example.user_management_system.entity.Bank_account;
+import com.example.user_management_system.entity.BankAccount;
 import com.example.user_management_system.entity.Group;
 import com.example.user_management_system.entity.Role;
 import com.example.user_management_system.entity.User;
@@ -59,6 +59,7 @@ public class DataSeeder {
             manager.setStatus(true);
 
             User regularUser = new User();
+
             regularUser.setUsername("mike_user");
             regularUser.setEmail("mike.user@example.com");
             regularUser.setPassword("user123");
@@ -97,32 +98,33 @@ public class DataSeeder {
             groupRepository.save(managerGroup);
             groupRepository.save(userGroup);
 
-            Bank_account adminAccount = new Bank_account();
+            BankAccount adminAccount = new BankAccount();
             adminAccount.setAccountNumber("1234567890");
             adminAccount.setAccountHolderName("John Admin");
-            adminAccount.setAccountType("Savings");
+            adminAccount.setBalance(10000.0);
             adminAccount.setBankName("Bank A");
-            adminAccount.setBranchName("Branch X");
+            adminAccount.setBranchCode("#123");
             adminAccount.setStatus(true);
-            adminAccount.setUser(admin);
 
-            Bank_account managerAccount = new Bank_account();
-            managerAccount.setAccountNumber("2345678901");
-            managerAccount.setAccountHolderName("Sara Manager");
-            managerAccount.setAccountType("Checking");
+
+            BankAccount managerAccount = new BankAccount();
+            managerAccount.setAccountNumber("9876543210");
+            managerAccount.setAccountHolderName("Sara_Manager");
+            managerAccount.setBalance(20000.0);
             managerAccount.setBankName("Bank B");
-            managerAccount.setBranchName("Branch Y");
+            managerAccount.setBranchCode("#143");
             managerAccount.setStatus(true);
-            managerAccount.setUser(manager);
 
-            Bank_account userAccount = new Bank_account();
-            userAccount.setAccountNumber("3456789012");
-            userAccount.setAccountHolderName("Mike User");
-            userAccount.setAccountType("Savings");
+
+            BankAccount userAccount = new BankAccount();
+            userAccount.setAccountNumber("789456321");
+            userAccount.setAccountHolderName("Kamal user");
+            userAccount.setBalance(100000.0);
             userAccount.setBankName("Bank C");
-            userAccount.setBranchName("Branch Z");
+            userAccount.setBranchCode("#103");
             userAccount.setStatus(true);
-            userAccount.setUser(regularUser);
+
+
 
             bankAccountRepository.save(adminAccount);
             bankAccountRepository.save(managerAccount);

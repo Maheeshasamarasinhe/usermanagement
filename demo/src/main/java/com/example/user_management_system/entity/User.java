@@ -28,6 +28,6 @@ public class User {
     private boolean status;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Bank_account> bankAccounts;
+    private List<BankAccount> bankAccounts;
 }
 
